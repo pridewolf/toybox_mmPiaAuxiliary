@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>ぴあ申込フォーム ブックマークレット生成</title>
+	<style>
+		:root {
+			--color-bg: #e2e6ea;
+			--color-surface: #fff;
+			--color-border: #e2e6ea;
+			--color-text: #1a1d21;
+			--color-text-muted: #5c6370;
+			--color-primary: #023999;
+			--color-primary-hover: #1a4fb3;
+			--color-accent: #3366cc;
+			--color-required: #c53030;
+			--color-success: #0d9488;
+			--radius: 8px;
+			--radius-sm: 6px;
+			--shadow: 0 1px 3px rgba(0,0,0,.06);
+			--shadow-md: 0 4px 12px rgba(0,0,0,.08);
+		}
+		* { box-sizing: border-box; }
+		body {
+			font-family: "Helvetica Neue", Helvetica, Arial, "游ゴシック体", YuGothic, "Hiragino Sans", Meiryo, sans-serif;
+			margin: 0;
+			padding: 24px 16px 48px;
+			background: var(--color-bg);
+			color: var(--color-text);
+			line-height: 1.6;
+			font-size: 15px;
+		}
+		.page { max-width: 720px; margin: 0 auto; }
+		.header {
+			background: linear-gradient(135deg, var(--color-primary) 0%, #1a4fb3 100%);
+			color: #fff;
+			padding: 28px 24px;
+			border-radius: var(--radius);
+			margin-bottom: 24px;
+			box-shadow: var(--shadow-md);
+		}
+		.header h1 {
+			margin: 0 0 8px 0;
+			font-size: 1.35rem;
+			font-weight: 700;
+			letter-spacing: -0.02em;
+		}
+		.header-desc { margin: 0; opacity: .95; font-size: .9rem; }
+		.badge {
+			display: inline-block;
+			background: rgba(255,255,255,.2);
+			color: #fff;
+			font-size: .75rem;
+			padding: 6px 10px;
+			border-radius: 20px;
+			margin-top: 12px;
+			font-weight: 500;
+		}
+		.card {
+			background: var(--color-surface);
+			border-radius: var(--radius);
+			padding: 20px 24px;
+			margin-bottom: 20px;
+			box-shadow: var(--shadow);
+			border: 1px solid var(--color-border);
+		}
+		.card h2 {
+			font-size: 1rem;
+			font-weight: 700;
+			color: var(--color-text);
+			margin: 0 0 18px 0;
+			padding-bottom: 12px;
+			border-bottom: 1px solid var(--color-border);
+		}
+		section {
+			margin: 0;
+			padding-top: 0;
+		}
+		section + section {
+			margin-top: 28px;
+			padding-top: 28px;
+		}
+		label {
+			display: block;
+			margin-top: 16px;
+			margin-bottom: 6px;
+			font-weight: 600;
+			color: var(--color-text);
+			font-size: .9rem;
+		}
+		label:first-child { margin-top: 0; }
+		input[type="text"],
+		select {
+			width: 100%;
+			max-width: 100%;
+			padding: 10px 12px;
+			margin: 0;
+			font-size: 15px;
+			line-height: 1.4;
+			border: 1px solid var(--color-border);
+			border-radius: var(--radius-sm);
+			background: var(--color-surface);
+			color: var(--color-text);
+			transition: border-color .15s, box-shadow .15s;
+		}
+		input[type="text"]::placeholder,
+		textarea::placeholder { color: #b0b8c0; opacity: 0.85; }
+		input[type="text"]:focus,
+		select:focus {
+			outline: none;
+			border-color: var(--color-accent);
+			box-shadow: 0 0 0 3px rgba(51,102,204,.15);
+		}
+		select { cursor: pointer; appearance: auto; }
+		.companion-extra { display: none; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--color-border); }
+		.companion-extra.visible { display: block; }
+		.btn-outline {
+			background: transparent;
+			color: var(--color-accent);
+			border: 1px solid #7eb8f0;
+			padding: 8px 16px;
+			font-size: .9rem;
+		}
+		.btn-outline:hover { background: rgba(126,184,240,.12); }
+		.companion-btn-wrap { text-align: center; margin-top: 16px; }
+		.column2 {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 12px 16px;
+		}
+		.column2 + .column2 { margin-top: 20px; }
+		.column3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px 16px; }
+		.note {
+			font-size: .85rem;
+			color: var(--color-text-muted);
+			margin: 8px 0 0 0;
+			line-height: 1.5;
+		}
+		.caution { color: var(--color-required); font-size: .9em; }
+		.radio-group {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 12px 20px;
+			margin-top: 6px;
+		}
+		.radio-group label {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			margin: 0;
+			font-weight: 500;
+			cursor: pointer;
+		}
+		.radio-group input[type="radio"] {
+			width: 18px;
+			height: 18px;
+			accent-color: var(--color-primary);
+			cursor: pointer;
+		}
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			padding: 12px 28px;
+			font-size: 1rem;
+			font-weight: 600;
+			border: none;
+			border-radius: var(--radius-sm);
+			cursor: pointer;
+			transition: background .2s, transform .05s;
+		}
+		.btn:active { transform: scale(.98); }
+		.btn-primary {
+			background: var(--color-primary);
+			color: #fff;
+			box-shadow: 0 2px 4px rgba(2,57,153,.2);
+		}
+		.btn-primary:hover { background: var(--color-primary-hover); }
+		.btn-secondary {
+			background: #475569;
+			color: #fff;
+		}
+		.btn-secondary:hover { background: #64748b; }
+		#output { margin-top: 4px; }
+		#output h2 { margin-bottom: 8px; }
+		#output > p { margin: 0 0 14px 0; color: var(--color-text-muted); font-size: .9rem; }
+		#bookmarkletCode {
+			width: 100%;
+			min-height: 100px;
+			font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, monospace;
+			font-size: 11px;
+			line-height: 1.5;
+			padding: 14px;
+			border: 1px solid var(--color-border);
+			border-radius: var(--radius-sm);
+			background: #f1f5f9;
+			color: #334155;
+			word-break: break-all;
+			resize: vertical;
+		}
+		.output-actions { margin-top: 12px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+		.success { color: var(--color-success); font-weight: 600; font-size: .9rem; }
+		@media (max-width: 560px) {
+			.column2:not(.row-mobile), .column3:not(.row-mobile) { grid-template-columns: 1fr; }
+			.header { padding: 20px 18px; }
+			.card { padding: 16px 18px; }
+		}
+	</style>
+</head>
+<body>
+	<div class="page">
+		<header class="header">
+			<h1>ぴあ申込フォーム 自動入力ブックマークレット生成</h1>
+			<p class="header-desc">下記の項目を入力し「ブックマークレットを生成」を押すと、申込ページで使えるブックマークレットが生成されます。</p>
+			<span class="badge">ローカル完結・外部送信なし</span>
+		</header>
+
+		<form id="genForm">
+		<div class="card">
+			<section>
+			<h2>お名前</h2>
+			<div class="column2 row-mobile">
+				<div>
+					<label>姓（漢字）</label>
+					<input type="text" id="cstmr_lnm" name="cstmr_lnm" placeholder="例）ぴあ">
+				</div>
+				<div>
+					<label>名（漢字）</label>
+					<input type="text" id="cstmr_fnm" name="cstmr_fnm" placeholder="例）花子">
+				</div>
+			</div>
+			<div class="column2 row-mobile">
+				<div>
+					<label>姓（カナ）</label>
+					<input type="text" id="cstmr_lkn" name="cstmr_lkn" placeholder="例）ピア">
+				</div>
+				<div>
+					<label>名（カナ）</label>
+					<input type="text" id="cstmr_fkn" name="cstmr_fkn" placeholder="例）ハナコ">
+				</div>
+			</div>
+			</section>
+
+			<section>
+			<h2>性別</h2>
+			<div class="radio-group">
+				<label><input type="radio" name="sex_typ" value="2"> 女性</label>
+				<label><input type="radio" name="sex_typ" value="1"> 男性</label>
+				<label><input type="radio" name="sex_typ" value="8"> その他</label>
+				<label><input type="radio" name="sex_typ" value="9"> 回答しない</label>
+			</div>
+			</section>
+
+			<section>
+			<h2>生年月日</h2>
+			<div class="column3 row-mobile">
+				<div>
+					<label>年</label>
+					<input type="text" id="birth_yyyy" name="birth_yyyy" placeholder="1990" maxlength="4" inputmode="numeric">
+				</div>
+				<div>
+					<label>月</label>
+					<input type="text" id="birth_mm" name="birth_mm" placeholder="5" maxlength="2" inputmode="numeric">
+				</div>
+				<div>
+					<label>日</label>
+					<input type="text" id="birth_dd" name="birth_dd" placeholder="15" maxlength="2" inputmode="numeric">
+				</div>
+			</div>
+			</section>
+
+			<section>
+			<h2>電話番号・メールアドレス</h2>
+			<label>電話番号（半角数字・ハイフンありでもなしでも可）</label>
+			<input type="text" id="telno" name="telno" placeholder="090-1234-5678" maxlength="13">
+			<label>メールアドレス</label>
+			<input type="text" id="ml_addr" name="ml_addr" placeholder="example@example.com">
+			<p class="note">確認用欄は同じ値で自動入力されます。</p>
+			</section>
+
+			<section>
+			<h2>郵便番号</h2>
+			<label>郵便番号（半角数字・ハイフンありでもなしでも可）</label>
+			<input type="text" id="postcode" name="postcode" placeholder="150-0011" maxlength="8">
+			</section>
+
+			<section>
+			<h2>住所</h2>
+			<label>都道府県</label>
+			<select id="cmnt11" name="cmnt11">
+				<option value="">▼選択</option>
+				<option value="北海道">北海道</option><option value="青森県">青森県</option><option value="岩手県">岩手県</option><option value="宮城県">宮城県</option>
+				<option value="秋田県">秋田県</option><option value="山形県">山形県</option><option value="福島県">福島県</option><option value="茨城県">茨城県</option>
+				<option value="栃木県">栃木県</option><option value="群馬県">群馬県</option><option value="埼玉県">埼玉県</option><option value="千葉県">千葉県</option>
+				<option value="東京都">東京都</option><option value="神奈川県">神奈川県</option><option value="新潟県">新潟県</option><option value="富山県">富山県</option>
+				<option value="石川県">石川県</option><option value="福井県">福井県</option><option value="山梨県">山梨県</option><option value="長野県">長野県</option>
+				<option value="岐阜県">岐阜県</option><option value="静岡県">静岡県</option><option value="愛知県">愛知県</option><option value="三重県">三重県</option>
+				<option value="滋賀県">滋賀県</option><option value="京都府">京都府</option><option value="大阪府">大阪府</option><option value="兵庫県">兵庫県</option>
+				<option value="奈良県">奈良県</option><option value="和歌山県">和歌山県</option><option value="鳥取県">鳥取県</option><option value="島根県">島根県</option>
+				<option value="岡山県">岡山県</option><option value="広島県">広島県</option><option value="山口県">山口県</option><option value="徳島県">徳島県</option>
+				<option value="香川県">香川県</option><option value="愛媛県">愛媛県</option><option value="高知県">高知県</option><option value="福岡県">福岡県</option>
+				<option value="佐賀県">佐賀県</option><option value="長崎県">長崎県</option><option value="熊本県">熊本県</option><option value="大分県">大分県</option>
+				<option value="宮崎県">宮崎県</option><option value="鹿児島県">鹿児島県</option><option value="沖縄県">沖縄県</option>
+			</select>
+			<label>市町村</label>
+			<input type="text" id="cmnt12" name="cmnt12" maxlength="26" placeholder="例）渋谷区">
+			<label>町名</label>
+			<input type="text" id="cmnt13" name="cmnt13" maxlength="26" placeholder="例）東">
+			<label>番地・マンション名等</label>
+			<input type="text" id="cmnt14" name="cmnt14" maxlength="26" placeholder="例）１－２－２０">
+			</section>
+
+			<section>
+			<h2>申込状況照会用パスワード</h2>
+			<label>申込状況照会用パスワード（半角英数字6桁～16桁）</label>
+			<input type="text" id="gnrl_cstmr_passwd" name="gnrl_cstmr_passwd" maxlength="16" placeholder="6～16桁" autocomplete="off">
+			<p class="note">※アカウントログイン用パスワードとは異なります。申込状況照会時に必要なパスワードです。</p>
+			</section>
+
+			<section>
+			<h2>同行者情報（2枚以上の場合）</h2>
+			<p class="note">同行者1のカナ氏名・電話番号（ハイフンなし）。2人目以降は「同行者を増やす」で表示できます。</p>
+			<label>同行者1 カナ氏名</label>
+			<input type="text" id="cmnt21" name="cmnt21" maxlength="40" placeholder="例）ヤマダタロウ">
+			<label>同行者1 電話番号（半角・ハイフンなし）</label>
+			<input type="text" id="cmnt22" name="cmnt22" maxlength="11" placeholder="例）09012345678">
+			<div id="companion2Block" class="companion-extra">
+				<label>同行者2 カナ氏名</label>
+				<input type="text" id="cmnt23" name="cmnt23" maxlength="40" placeholder="例）ヤマダタロウ">
+				<label>同行者2 電話番号（半角・ハイフンなし）</label>
+				<input type="text" id="cmnt24" name="cmnt24" maxlength="11" placeholder="例）09012345678">
+			</div>
+			<div id="companion3Block" class="companion-extra">
+				<label>同行者3 カナ氏名</label>
+				<input type="text" id="cmnt25" name="cmnt25" maxlength="40" placeholder="例）ヤマダタロウ">
+				<label>同行者3 電話番号（半角・ハイフンなし）</label>
+				<input type="text" id="cmnt26" name="cmnt26" maxlength="11" placeholder="例）09012345678">
+			</div>
+			<div class="companion-btn-wrap">
+				<button type="button" id="btnAddCompanion" class="btn btn-outline">同行者を増やす</button>
+			</div>
+			</section>
+
+			<section>
+			<button type="button" id="btnGenerate" class="btn btn-primary">ブックマークレットを生成</button>
+			</section>
+		</div>
+	</form>
+
+	<div id="output" class="card" style="display:none;">
+		<h2>生成されたブックマークレット</h2>
+		<p>下記をコピーし、ブラウザのブックマークのURL欄に貼り付けて保存してください。申込入力ページを開いた状態でそのブックマークを実行するとフォームが自動入力されます。</p>
+		<textarea id="bookmarkletCode" readonly></textarea>
+		<div class="output-actions">
+			<button type="button" id="btnCopy" class="btn btn-secondary">コピー</button>
+			<span id="copyResult"></span>
+		</div>
+	</div>
+	</div>
+
+	<script>
+		function pad2(n) { var s = String(n || '').replace(/\D/g, ''); if (!s) return ''; return s.length === 1 ? '0' + s : s; }
+
+		var fieldIds = [
+			'cstmr_lnm','cstmr_fnm','cstmr_lkn','cstmr_fkn',
+			'birth_yyyy','birth_mm','birth_dd',
+			'ml_addr',
+			'cmnt11','cmnt12','cmnt13','cmnt14',
+			'gnrl_cstmr_passwd',
+			'cmnt21','cmnt22','cmnt23','cmnt24','cmnt25','cmnt26'
+		];
+
+		function parseTelno(str) {
+			var digits = (str || '').replace(/\D/g, '');
+			// 申込ページは 3桁-4桁-4桁 表示（例: 090-1234-5678）
+			return {
+				telno1: digits.substring(0, 3) || '',
+				telno2: digits.substring(3, 7) || '',
+				telno3: digits.substring(7, 11) || ''
+			};
+		}
+		function parsePostcode(str) {
+			var digits = (str || '').replace(/\D/g, '');
+			return {
+				cmnt01: digits.substring(0, 3) || '',
+				cmnt02: digits.substring(3, 7) || ''
+			};
+		}
+
+		document.getElementById('btnAddCompanion').onclick = function() {
+			var b2 = document.getElementById('companion2Block');
+			var b3 = document.getElementById('companion3Block');
+			var btn = document.getElementById('btnAddCompanion');
+			if (!b2.classList.contains('visible')) {
+				b2.classList.add('visible');
+				btn.textContent = '同行者を増やす';
+			} else if (!b3.classList.contains('visible')) {
+				b3.classList.add('visible');
+				btn.style.display = 'none';
+			}
+		};
+
+		document.getElementById('btnGenerate').onclick = function() {
+			var data = {};
+			fieldIds.forEach(function(id) {
+				var el = document.getElementById(id);
+				if (el) data[id] = (el.value || '').trim();
+			});
+			var radio = document.querySelector('input[name="sex_typ"]:checked');
+			data.sex_typ = radio ? radio.value : '';
+			// 月・日は申込ページのselect形式（01～12, 01～31）に合わせて2桁に正規化
+			if (data.birth_mm !== undefined) data.birth_mm = pad2(data.birth_mm);
+			if (data.birth_dd !== undefined) data.birth_dd = pad2(data.birth_dd);
+			var tel = parseTelno(document.getElementById('telno').value);
+			data.telno1 = tel.telno1;
+			data.telno2 = tel.telno2;
+			data.telno3 = tel.telno3;
+			var zip = parsePostcode(document.getElementById('postcode').value);
+			data.cmnt01 = zip.cmnt01;
+			data.cmnt02 = zip.cmnt02;
+
+			var json = JSON.stringify(data);
+			var base64 = btoa(unescape(encodeURIComponent(json)));
+
+			var script = [
+				'javascript:(function(){',
+				'var b="' + base64 + '";',
+				'var d;try{d=JSON.parse(decodeURIComponent(escape(atob(b))));}catch(e){alert("データの読み込みに失敗しました");return;}',
+				'var f=document.forms[0];',
+				'if(!f){alert("フォームが見つかりません。申込入力ページで実行してください。");return;}',
+				'for(var k in d){',
+				'var e=f.elements[k];',
+				'if(!e)continue;',
+				'if(e.tagName==="SELECT"){e.value=d[k]||"";}',
+				'else if(e.length!==undefined){',
+				'for(var i=0;i<e.length;i++){if(e[i].value===d[k]){e[i].checked=true;break;}}',
+				'}else if(e.type==="radio"){e.checked=(e.value===d[k]);}',
+				'else{e.value=d[k]||"";}',
+				'}',
+				'var cf=f.elements["ml_addr_cnfm"];',
+				'if(cf&&d["ml_addr"]){cf.value=d["ml_addr"];}',
+				'})();'
+			].join('');
+
+			document.getElementById('bookmarkletCode').value = script;
+			document.getElementById('output').style.display = 'block';
+		};
+
+		document.getElementById('btnCopy').onclick = function() {
+			var ta = document.getElementById('bookmarkletCode');
+			ta.select();
+			ta.setSelectionRange(0, 99999);
+			try {
+				document.execCommand('copy');
+				document.getElementById('copyResult').textContent = 'コピーしました';
+				document.getElementById('copyResult').className = 'success';
+			} catch (err) {
+				document.getElementById('copyResult').textContent = 'コピーに失敗しました';
+			}
+		};
+	</script>
+</body>
+</html>
