@@ -54,7 +54,7 @@
 			font-size: .75rem;
 			padding: 6px 10px;
 			border-radius: 20px;
-			margin-top: 12px;
+			margin-bottom: 12px;
 			font-weight: 500;
 		}
 		.card {
@@ -121,6 +121,8 @@
 			border: 1px solid #7eb8f0;
 			padding: 8px 16px;
 			font-size: .9rem;
+			border-style: solid !important;
+			border-width: 1px !important;
 		}
 		.btn-outline:hover { background: rgba(126,184,240,.12); }
 		.companion-btn-wrap { text-align: center; margin-top: 16px; }
@@ -212,14 +214,15 @@
 	<div class="page">
 		<header class="header">
 			<h1>ぴあ申込フォーム 自動入力ブックマークレット生成</h1>
+			<span class="badge">MM2026 オフィシャルWEB抽選先行（一次受付） 対応版</span>
 			<p class="header-desc">下記の項目を入力し「ブックマークレットを生成」を押すと、申込ページで使えるブックマークレットが生成されます。</p>
-			<span class="badge">ローカル完結・外部送信なし</span>
+			<p class="header-desc">ローカルで完結、外部送信なしのツールです。</p>
 		</header>
 
 		<form id="genForm">
 		<div class="card">
 			<section>
-			<h2>お名前</h2>
+			<h2>名前</h2>
 			<div class="column2 row-mobile">
 				<div>
 					<label>姓（漢字）</label>
@@ -271,7 +274,7 @@
 			</section>
 
 			<section>
-			<h2>電話番号・メールアドレス</h2>
+			<h2>連絡先</h2>
 			<label>電話番号（半角数字・ハイフンありでもなしでも可）</label>
 			<input type="text" id="telno" name="telno" placeholder="090-1234-5678" maxlength="13">
 			<label>メールアドレス</label>
@@ -351,7 +354,7 @@
 	<div id="output" class="card" style="display:none;">
 		<h2>生成されたブックマークレット</h2>
 		<p>下記をコピーし、ブラウザのブックマークのURL欄に貼り付けて保存してください。申込入力ページを開いた状態でそのブックマークを実行するとフォームが自動入力されます。</p>
-		<p>申込みが完了したら、安全のためブックマークレットは削除することをオススメします。</p>
+		<p>※申込みが完了したら、ブックマークレットは削除することをオススメします。</p>
 		<textarea id="bookmarkletCode" readonly></textarea>
 		<div class="output-actions">
 			<button type="button" id="btnCopy" class="btn btn-secondary">コピー</button>
