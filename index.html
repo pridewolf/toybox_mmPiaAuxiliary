@@ -112,7 +112,7 @@
 			border-color: var(--color-accent);
 			box-shadow: 0 0 0 3px rgba(51,102,204,.15);
 		}
-		select { cursor: pointer; appearance: auto; }
+		select { cursor: pointer; appearance: none; }
 		.companion-extra { display: none; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--color-border); }
 		.companion-extra.visible { display: block; }
 		.btn-outline {
@@ -213,10 +213,10 @@
 <body>
 	<div class="page">
 		<header class="header">
-			<h1>ぴあ申込フォーム 自動入力ブックマークレット生成</h1>
-			<span class="badge">MM2026 オフィシャルWEB抽選先行（一次受付） 対応版</span>
-			<p class="header-desc">下記の項目を入力し「ブックマークレットを生成」を押すと、申込ページで使えるブックマークレットが生成されます。</p>
-			<p class="header-desc">ローカルで完結、外部送信なしのツールです。</p>
+			<h1>ぴあ申込フォーム 定型文自動入力ブックマークレット生成</h1>
+			<span class="badge">MM2026 オフィシャルWEB抽選先行（一次受付）版</span>
+			<p class="header-desc">下記の項目を入力し「ブックマークレットを生成」を押すと、申込ページで使えるブックマークレットを生成します。</p>
+			<p class="header-desc">ローカルで完結する外部送信なしのツールです。</p>
 		</header>
 
 		<form id="genForm">
@@ -275,16 +275,15 @@
 
 			<section>
 			<h2>連絡先</h2>
-			<label>電話番号（半角数字・ハイフンありでもなしでも可）</label>
+			<label>電話番号（半角数字）</label>
 			<input type="text" id="telno" name="telno" placeholder="090-1234-5678" maxlength="13">
 			<label>メールアドレス</label>
 			<input type="text" id="ml_addr" name="ml_addr" placeholder="example@example.com">
-			<p class="note">確認用欄は同じ値で自動入力されます。</p>
 			</section>
 
 			<section>
 			<h2>郵便番号</h2>
-			<label>郵便番号（半角数字・ハイフンありでもなしでも可）</label>
+			<label>郵便番号（半角数字）</label>
 			<input type="text" id="postcode" name="postcode" placeholder="150-0011" maxlength="8">
 			</section>
 
@@ -316,14 +315,14 @@
 
 			<section>
 			<h2>申込状況照会用パスワード</h2>
-			<label>申込状況照会用パスワード（半角英数字6桁～16桁）</label>
+			<label>申込状況照会用パスワード（半角英数字）</label>
 			<input type="text" id="gnrl_cstmr_passwd" name="gnrl_cstmr_passwd" maxlength="16" placeholder="6～16桁" autocomplete="off">
-			<p class="note">※アカウントログイン用パスワードとは異なります。申込状況照会時に必要なパスワードです。</p>
+			<p class="note">※ログイン用パスワードとは異なります</p>
 			</section>
 
 			<section>
 			<h2>同行者情報（2枚以上の場合）</h2>
-			<p class="note">同行者1のカナ氏名・電話番号（ハイフンなし）。2人目以降は「同行者を増やす」で表示できます。</p>
+			<p class="note">2人目以降は「同行者を増やす」押下で追加します。</p>
 			<label>同行者1 カナ氏名</label>
 			<input type="text" id="cmnt21" name="cmnt21" maxlength="40" placeholder="例）ヤマダタロウ">
 			<label>同行者1 電話番号（半角・ハイフンなし）</label>
@@ -354,7 +353,8 @@
 	<div id="output" class="card" style="display:none;">
 		<h2>生成されたブックマークレット</h2>
 		<p>下記をコピーし、ブラウザのブックマークのURL欄に貼り付けて保存してください。申込入力ページを開いた状態でそのブックマークを実行するとフォームが自動入力されます。</p>
-		<p>※申込みが完了したら、ブックマークレットは削除することをオススメします。</p>
+		<p>※申込みがすべて完了したら、ブックマークレットは削除することをオススメします。</p>
+		<p><a href="https://wayohoo.com/article/5444#google_vignette" target="_blank">使い方のガイド（外部サイト）</a></p>
 		<textarea id="bookmarkletCode" readonly></textarea>
 		<div class="output-actions">
 			<button type="button" id="btnCopy" class="btn btn-secondary">コピー</button>
