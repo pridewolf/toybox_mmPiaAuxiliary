@@ -74,6 +74,11 @@
 			padding-bottom: 12px;
 			border-bottom: 1px solid var(--color-border);
 		}
+		.card-desc {
+			margin: 0 0 30px;
+			font-size: .85rem;
+			color: var(--color-text-muted);
+		}
 		section {
 			margin: 0;
 			padding-top: 0;
@@ -204,25 +209,65 @@
 		}
 		.output-actions { margin-top: 12px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 		.success { color: var(--color-success); font-weight: 600; font-size: .9rem; }
+
+
+		.ext{
+			margin-top: 16px;
+			padding-top: 16px;
+			border-top: 1px dashed var(--color-border);
+		}
+		.ext-link {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 8px;
+			padding: 8px 16px;
+			color: #555;
+			text-decoration: none;
+			font-size: 14px;
+			border: 1px solid #ddd;
+			border-radius: 6px;
+			background-color: #fafafa;
+			transition: all 0.3s ease;
+			background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'%3E%3C/path%3E%3Cpolyline points='15 3 21 3 21 9'%3E%3C/polyline%3E%3Cline x1='10' y1='14' x2='21' y2='3'%3E%3C/line%3E%3C/svg%3E");
+			background-repeat: no-repeat;
+			background-position: right 12px center;
+			padding-right: 36px;
+		}
+		.ext-link:hover {
+			color: #000;
+			border-color: #bbb;
+			background-color: #fff;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+			transform: translateY(-1px);
+		}
+
 		@media (max-width: 560px) {
 			.column2:not(.row-mobile), .column3:not(.row-mobile) { grid-template-columns: 1fr; }
 			.header { padding: 20px 18px; }
 			.card { padding: 16px 18px; }
+			.ext-link {
+				width: 100%;
+				padding: 12px 16px;
+				padding-right: 36px;
+			}
 		}
+
 	</style>
 </head>
 <body>
 	<div class="page">
 		<header class="header">
-			<h1>ぴあ申込フォーム 定型文自動入力ブックマークレット生成</h1>
+			<h1>ぴあ申込フォーム 定型文入力補助</h1>
 			<span class="badge">MM2026 オフィシャルWEB抽選先行（一次受付）版</span>
-			<p class="header-desc">複数公演申込時、同じ内容を入れ直す手間を削減するためのブックマークレットを作成します。<br>（外部送信、データ保持なし、ローカル完結）</p>
-			<p class="header-desc">同行者情報以外はすべて必須入力項目です。</p>
+			<p class="header-desc">複数公演申込時、同じ内容を入れ直す手間を削減するためのブックマークレットを作成します。<br>（外部送信やデータ保持なしのローカル完結。）</p>
 			<p class="header-desc">自己責任のもとでご利用ください。</p>
 		</header>
 
 		<form id="genForm">
 		<div class="card">
+			<p class="card-desc">※ 同行者情報以外はすべて必須入力項目です。</p>
+
 			<section>
 			<h2>名前</h2>
 			<div class="column2 row-mobile">
@@ -283,14 +328,11 @@
 			<input type="text" id="ml_addr" name="ml_addr" placeholder="example@example.com">
 			</section>
 
-			<section>
-			<h2>郵便番号</h2>
+		
+		<section>
+			<h2>住所</h2>
 			<label>郵便番号（半角数字）</label>
 			<input type="text" id="postcode" name="postcode" placeholder="150-0011" maxlength="8">
-			</section>
-
-			<section>
-			<h2>住所</h2>
 			<label>都道府県</label>
 			<select id="cmnt11" name="cmnt11">
 				<option value="">▼選択</option>
@@ -324,7 +366,6 @@
 
 			<section>
 			<h2>同行者情報（2枚以上の場合）</h2>
-			<p class="note">2人目以降は「同行者を増やす」押下で追加します。</p>
 			<label>同行者1 カナ氏名</label>
 			<input type="text" id="cmnt21" name="cmnt21" maxlength="40" placeholder="例）ヤマダタロウ">
 			<label>同行者1 電話番号（半角・ハイフンなし）</label>
@@ -356,11 +397,13 @@
 		<h2>生成されたブックマークレット</h2>
 		<p>下記をコピーし、ブラウザのブックマークのURL欄に貼り付けて保存してください。申込入力ページを開いた状態でそのブックマークを実行するとフォームが自動入力されます。</p>
 		<p>※申込みがすべて完了したら、ブックマークレットは削除することをオススメします。</p>
-		<p><a href="https://wayohoo.com/article/5444#google_vignette" target="_blank">使い方のガイド（外部サイト）</a></p>
 		<textarea id="bookmarkletCode" readonly></textarea>
 		<div class="output-actions">
 			<button type="button" id="btnCopy" class="btn btn-secondary">コピー</button>
 			<span id="copyResult"></span>
+		</div>
+		<div class="ext">
+			<a href="https://wayohoo.com/article/5444#google_vignette" target="_blank" class="ext-link">使い方のガイド（外部サイト）</a>
 		</div>
 	</div>
 	</div>
