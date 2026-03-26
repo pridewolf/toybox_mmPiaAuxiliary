@@ -212,9 +212,16 @@
 
 
 		.ext{
-			margin-top: 16px;
-			padding-top: 16px;
+			margin: 0 auto 16px;
+			padding-top: 0;
 			border-top: 1px dashed var(--color-border);
+			text-align: center;
+			background: var(--color-surface);
+			border-radius: var(--radius);
+			padding: 20px 24px;
+			margin-bottom: 20px;
+			box-shadow: var(--shadow);
+			border: 1px solid var(--color-border);
 		}
 		.ext-link {
 			display: inline-flex;
@@ -246,6 +253,13 @@
 			.column2:not(.row-mobile), .column3:not(.row-mobile) { grid-template-columns: 1fr; }
 			.header { padding: 20px 18px; }
 			.card { padding: 16px 18px; }
+			.ext{
+				margin: 20px 16px;
+				padding: 0;
+				border: 0;
+				box-shadow: 0;
+				background: none;
+			}
 			.ext-link {
 				width: 100%;
 				padding: 12px 16px;
@@ -263,6 +277,10 @@
 			<p class="header-desc">複数公演申込時、同じ内容を入れ直す手間を削減するためのブックマークレットを作成します。<br>（外部送信やデータ保持なしのローカル完結。）</p>
 			<p class="header-desc">自己責任のもとでご利用ください。</p>
 		</header>
+
+		<div class="ext">
+			<a href="https://wayohoo.com/article/5444#google_vignette" target="_blank" class="ext-link">使い方のガイド（外部サイト）</a>
+		</div>
 
 		<form id="genForm">
 		<div class="card">
@@ -401,9 +419,6 @@
 		<div class="output-actions">
 			<button type="button" id="btnCopy" class="btn btn-secondary">コピー</button>
 			<span id="copyResult"></span>
-		</div>
-		<div class="ext">
-			<a href="https://wayohoo.com/article/5444#google_vignette" target="_blank" class="ext-link">使い方のガイド（外部サイト）</a>
 		</div>
 	</div>
 	</div>
