@@ -4,10 +4,10 @@
 
 チケットぴあの申込フォーム入力を補助するブックマークレット生成ツール。
 
-- `index.html` — 現行版。指示がない限り編集しない。
-- `index2.html` — ガイドを追加した改訂版。作業対象はこちら。
-- `docs/bookmarklet-guide.md` — 掲載文の原稿。index2.html と常に同期させる。
-- `docs/capture-list.md` — キャプチャの撮影仕様。画像は `docs/images/`。
+- `index.html` — 公開ページ。作業対象。
+- `docs/bookmarklet-guide.md` — 掲載文の原稿。index.html と常に同期させる。
+- `images/` — ページで使うキャプチャとロゴ。
+- `_config.yml` — GitHub Pages の公開対象から `.md` を除外する設定。
 
 ## 文章表現の方針
 
