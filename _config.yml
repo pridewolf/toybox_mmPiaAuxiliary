@@ -1,0 +1,5 @@
+# GitHub Pages（Jekyll）の公開対象から除外する
+exclude:
+  - CLAUDE.md
+  - README.md
+  - docs/
