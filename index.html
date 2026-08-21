@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>ぴあ申込フォーム ブックマークレット生成</title>
+	<title>MMぴあ 入力補助ツール</title>
 	<style>
 		:root {
 			--color-bg: #e2e6ea;
@@ -25,8 +25,9 @@
 		body {
 			font-family: "Helvetica Neue", Helvetica, Arial, "游ゴシック体", YuGothic, "Hiragino Sans", Meiryo, sans-serif;
 			margin: 0;
-			padding: 24px 16px 48px;
-			background: var(--color-bg);
+			padding: 10px 8px 48px;
+			/* background: var(--color-bg); */
+			background:#f1f9ff;
 			color: var(--color-text);
 			line-height: 1.6;
 			font-size: 15px;
@@ -73,6 +74,30 @@
 			margin: 0 0 18px 0;
 			padding-bottom: 12px;
 			border-bottom: 1px solid var(--color-border);
+		}
+		.card section > h2 {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			font-size: .95rem;
+			color: var(--color-primary);
+			letter-spacing: .04em;
+			margin-bottom: 16px;
+			padding: 0 0 10px;
+			border-bottom: 2px solid #dfe5ec;
+		}
+		.card section > h2::before {
+			content: "";
+			flex: none;
+			width: 4px;
+			height: 15px;
+			border-radius: 2px;
+			background: var(--color-primary);
+		}
+		.card section label {
+			font-size: .84rem;
+			font-weight: 600;
+			color: #46505e;
 		}
 		.card-desc {
 			margin: 0 0 30px;
@@ -149,20 +174,22 @@
 		.radio-group {
 			display: flex;
 			flex-wrap: wrap;
-			gap: 12px 20px;
+			gap: 10px 14px;
 			margin-top: 6px;
 		}
 		.radio-group label {
 			display: flex;
 			align-items: center;
-			gap: 8px;
+			gap: 5px;
 			margin: 0;
 			font-weight: 500;
 			cursor: pointer;
 		}
 		.radio-group input[type="radio"] {
+			flex: none;
 			width: 18px;
 			height: 18px;
+			margin: 0;
 			accent-color: var(--color-primary);
 			cursor: pointer;
 		}
@@ -191,7 +218,7 @@
 		}
 		.btn-secondary:hover { background: #64748b; }
 		#output { margin-top: 4px; }
-		#output h2 { margin-bottom: 8px; }
+		#output .step-head h2 { margin-bottom: 0; }
 		#output > p { margin: 0 0 14px 0; color: var(--color-text-muted); font-size: .9rem; }
 		#bookmarkletCode {
 			width: 100%;
@@ -245,7 +272,7 @@
 		@media (max-width: 560px) {
 			.column2:not(.row-mobile), .column3:not(.row-mobile) { grid-template-columns: 1fr; }
 			.header { padding: 20px 18px; }
-			.card { padding: 16px 18px; }
+			.card { padding: 16px 16px; }
 			.ext{
 				margin:20px 0px 0;
 				padding: 0;
@@ -260,24 +287,338 @@
 			}
 		}
 
+	
+		/* ===== index2 追加分 ===== */
+		.brand {
+			padding: 8px 0 24px;
+		}
+		.brand-logo {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			height: auto;
+			margin: 0 auto 16px;
+			max-width: 640px;
+		}
+		.brand-logo img {
+			width: 320px;
+			height: 140px;
+		}
+		.brand-logo .logo-placeholder {
+			width: 100%;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border: 1px dashed #b6bfcb;
+			border-radius: var(--radius);
+			color: #94a0b0;
+			font-size: .75rem;
+			letter-spacing: .08em;
+		}
+		.sr-only {
+			position: absolute;
+			width: 1px; height: 1px;
+			padding: 0; margin: -1px;
+			overflow: hidden;
+			clip: rect(0 0 0 0);
+			white-space: nowrap;
+			border: 0;
+		}
+		.brand-lead {
+			margin: 0;
+			padding: 0 16px;
+			font-size: .95rem;
+			font-weight: 600;
+			color: var(--color-text);
+		}
+		.brand-sub {
+			margin: 6px 0 0;
+			padding: 0 16px;
+			font-size: .85rem;
+			color: var(--color-text-muted);
+		}
+
+		.step-head {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			margin: 0 0 6px;
+		}
+		.step-num {
+			flex: none;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 26px;
+			height: 26px;
+			border-radius: 50%;
+			background: var(--color-primary);
+			color: #fff;
+			font-size: .78rem;
+			font-weight: 700;
+		}
+		.step-head h2 {
+			margin: 0;
+			padding: 0;
+			border: none;
+			font-size: 1.02rem;
+			font-weight: 700;
+		}
+		.form-note {
+			margin: -8px 0 18px;
+			padding: 8px 12px;
+			background: #f6f8fa;
+			border-radius: var(--radius-sm);
+			font-size: .8rem;
+			color: var(--color-text-muted);
+		}
+		.step-lead {
+			margin: 0 0 18px;
+			font-size: .88rem;
+			color: var(--color-text-muted);
+		}
+		.card > .step-head + .step-lead { margin-bottom: 20px; }
+
+		details.guide {
+			background: var(--color-surface);
+			border: 1px solid var(--color-border);
+			border-radius: var(--radius);
+			box-shadow: var(--shadow);
+			margin-bottom: 20px;
+			overflow: hidden;
+		}
+		details.guide > summary {
+			list-style: none;
+			cursor: pointer;
+			padding: 16px 20px;
+			font-weight: 700;
+			font-size: .95rem;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 12px;
+		}
+		details.guide > summary::-webkit-details-marker { display: none; }
+		details.guide > summary::after {
+			content: "";
+			flex: none;
+			width: 9px;
+			height: 9px;
+			border-right: 2px solid var(--color-text-muted);
+			border-bottom: 2px solid var(--color-text-muted);
+			transform: rotate(45deg) translateY(-2px);
+			transition: transform .2s;
+		}
+		details.guide[open] > summary::after { transform: rotate(-135deg) translateY(-2px); }
+		details.guide .guide-body {
+			padding: 0 20px 20px;
+			font-size: .9rem;
+			color: var(--color-text);
+		}
+		details.guide .guide-body p { margin: 0 0 10px; }
+		details.guide .guide-body p:last-child { margin-bottom: 0; }
+		details.guide .guide-body ul { margin: 0; padding-left: 1.2em; color: var(--color-text-muted); }
+		details.guide .guide-body ul li + li { margin-top: 8px; }
+		details.guide .guide-body code {
+			font-family: ui-monospace, Menlo, monospace;
+			background: #f1f5f9;
+			padding: 1px 5px;
+			border-radius: 4px;
+			font-size: .9em;
+		}
+
+		.tabs {
+			display: flex;
+			gap: 6px;
+			margin: 16px 0 18px;
+			background: #eef1f5;
+			padding: 4px;
+			border-radius: var(--radius-sm);
+		}
+		.tab-btn {
+			flex: 1;
+			padding: 9px 4px;
+			border: none;
+			background: transparent;
+			border-radius: 5px;
+			font-size: .86rem;
+			font-weight: 600;
+			color: var(--color-text-muted);
+			cursor: pointer;
+			font-family: inherit;
+			transition: background .15s, color .15s;
+		}
+		.tab-btn[aria-selected="true"] {
+			background: var(--color-surface);
+			color: var(--color-primary);
+			box-shadow: var(--shadow);
+		}
+		.tab-panel { display: none; }
+		.tab-panel.active { display: block; }
+
+		ol.howto {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		}
+		.howto-item {
+			display: flex;
+			align-items: stretch;
+			gap: 14px;
+		}
+		.howto-rail {
+			flex: none;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			width: 24px;
+		}
+		.howto-line {
+			flex: 1;
+			width: 2px;
+			min-height: 12px;
+			margin: 6px 0;
+			background: var(--color-border);
+			border-radius: 1px;
+		}
+		.howto-num {
+			flex: none;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 24px;
+			height: 24px;
+			margin-top: 1px;
+			border-radius: 50%;
+			background: #eef1f5;
+			color: var(--color-primary);
+			font-size: .78rem;
+			font-weight: 700;
+		}
+		.howto-body { flex: 1; min-width: 0; padding-bottom: 20px; }
+		.howto-item:last-child .howto-body { padding-bottom: 0; }
+		.howto-body p {
+			margin: 0;
+			font-size: .92rem;
+			line-height: 1.65;
+		}
+		.howto-body .shot { margin-top: 10px; max-width: 240px; }
+		.shot { margin: 0; }
+		.shot img {
+			width: 100%;
+			display: block;
+			border: 1px solid var(--color-border);
+			border-radius: var(--radius-sm);
+			background: #fff;
+		}
+		.shot.is-missing img { display: none; }
+		.shot.is-missing .shot-ph {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			text-align: center;
+			min-height: 120px;
+			padding: 12px;
+			border: 1px dashed #b6bfcb;
+			border-radius: var(--radius-sm);
+			color: #94a0b0;
+			font-size: .74rem;
+			line-height: 1.4;
+		}
+		.shot-ph { display: none; }
+
+		.qa + .qa {
+			margin-top: 14px;
+			padding-top: 14px;
+			border-top: 1px dashed var(--color-border);
+		}
+		.qa-q {
+			margin: 0 0 4px;
+			font-weight: 700;
+			color: var(--color-text);
+		}
+		.qa-q::before {
+			content: "Q.";
+			margin-right: 6px;
+			color: var(--color-primary);
+			font-weight: 700;
+		}
+		.qa-a {
+			margin: 0;
+			color: var(--color-text-muted);
+		}
+		.qa-a::before {
+			content: "A.";
+			margin-right: 6px;
+			color: var(--color-text-muted);
+			font-weight: 700;
+		}
+		.hint {
+			margin: 16px 0 0;
+			font-size: .8rem;
+			color: var(--color-text-muted);
+		}
+
+		.notes {
+			margin: 0;
+			padding-left: 1.2em;
+			font-size: .85rem;
+			color: var(--color-text-muted);
+		}
+		.notes li + li { margin-top: 8px; }
+
+		.inline-icon {
+			margin: 0 4px;
+		}
+
+		.footer {
+			margin-top: 28px;
+			padding: 0 4px;
+			font-size: .78rem;
+			color: var(--color-text-muted);
+			line-height: 1.7;
+		}
+		.footer ul { margin: 0; padding-left: 1.1em; }
+		.footer li + li { margin-top: 6px; }
+
+		#output.is-empty .output-body { display: none; }
+		.output-waiting { color: var(--color-text-muted); font-size: .88rem; margin: 0; }
+		#output:not(.is-empty) .output-waiting { display: none; }
+
+		@media (max-width: 560px) {
+			.brand { padding-top: 4px; }
+			.brand-lead { font-size: .9rem; }
+			details.guide > summary { padding: 14px 16px; }
+			details.guide .guide-body { padding: 0 16px 16px; }
+			.tab-btn { font-size: .8rem; }
+		}
 	</style>
 </head>
 <body>
 	<div class="page">
-		<header class="header">
-			<h1>ぴあ申込フォーム 定型文入力補助</h1>
-			<span class="badge">MM2026 オフィシャルWEB抽選先行（一次受付）版</span>
-			<p class="header-desc">複数公演申込時、同じ内容を入れ直す手間を削減するためのブックマークレットを作成します。<br>（外部送信やデータ保持なしのローカル完結。）</p>
-			<p class="header-desc">自己責任のもとでご利用ください。</p>
-			<div class="ext">
-				<a href="https://wayohoo.com/article/5444#google_vignette" target="_blank" class="ext-link">使い方のガイド（外部サイト）</a>
+		<header class="brand">
+			<div class="brand-logo">
+				<img src="images/logo.webp" alt="MMぴあ 入力補助ツール">
 			</div>
+			<h1 class="sr-only">MMぴあ 入力補助ツール</h1>
+			<p class="brand-lead">複数公演に申し込むとき、都度おなじ内容を入力する手間を削減するツールです。</p>
+			<p class="brand-sub">入力した内容を「ブックマークレット」として保存し、申込フォームで呼び出します。</p>
 		</header>
 
+		<details class="guide" id="guideWhat">
+			<summary>ブックマークレットとは？</summary>
+			<div class="guide-body">
+				<p>ブックマークに保存して使う短いプログラムです。<br>通常のブックマークはページを開きますが、ブックマークレットではいま開いているページ上でプログラムを実行します。</p>
+				<p>本ツールでは、この仕組みを使って申込フォームの入力欄をまとめて埋めます。</p>
+			</div>
+		</details>
 
-		<form id="genForm">
 		<div class="card">
-			<p class="card-desc">※ 同行者情報以外はすべて必須入力項目です。</p>
+			<div class="step-head"><span class="step-num">1</span><h2>情報を入力する</h2></div>
+			<p class="step-lead">ここで入力した内容を、今後1クリックで呼び出せるようにします。</p>
+			<p class="form-note">※ 同行者情報以外はすべて必須入力項目です</p>
+			<form id="genForm">
 
 			<section>
 			<h2>名前</h2>
@@ -401,21 +742,168 @@
 			<section>
 			<button type="button" id="btnGenerate" class="btn btn-primary">ブックマークレットを生成</button>
 			</section>
+			</form>
 		</div>
-	</form>
 
-	<div id="output" class="card" style="display:none;">
-		<h2>生成されたブックマークレット</h2>
-		<p>下記をコピーし、ブラウザのブックマークのURL欄に貼り付けて保存してください。申込入力ページを開いた状態でそのブックマークを実行するとフォームが自動入力されます。</p>
-		<p>※申込みがすべて完了したら、ブックマークレットは削除することをオススメします。</p>
-		<textarea id="bookmarkletCode" readonly></textarea>
-		<div class="output-actions">
-			<button type="button" id="btnCopy" class="btn btn-secondary">コピー</button>
-			<span id="copyResult"></span>
+		<div id="output" class="card is-empty">
+			<div class="step-head"><span class="step-num">2</span><h2>コードをコピーする</h2></div>
+			<p class="output-waiting">STEP 1 の入力後、「ブックマークレットを生成」を押すとここにコードが表示されます。</p>
+			<div class="output-body">
+				<p class="step-lead">生成された文字列をコピーします。</p>
+				<textarea id="bookmarkletCode" readonly></textarea>
+				<div class="output-actions">
+					<button type="button" id="btnCopy" class="btn btn-secondary">コピー</button>
+					<span id="copyResult"></span>
+				</div>
+			</div>
 		</div>
-	</div>
-	</div>
 
+		<div class="card">
+			<div class="step-head"><span class="step-num">3</span><h2>ブックマークに保存する</h2></div>
+			<div class="tabs" role="tablist">
+				<button type="button" class="tab-btn" role="tab" data-tab="ios" aria-selected="true">iPhone</button>
+				<button type="button" class="tab-btn" role="tab" data-tab="and" aria-selected="false">Android</button>
+				<button type="button" class="tab-btn" role="tab" data-tab="pc" aria-selected="false">パソコン</button>
+			</div>
+
+			<div class="tab-panel active" data-panel="ios">
+				<ol class="howto">
+					<li class="howto-item">
+						<div class="howto-rail">
+							<span class="howto-num">1</span>
+							<span class="howto-line"></span>
+						</div>
+						<div class="howto-body">
+							<p>共有ボタン<img src="images/ios-share.svg" alt="共有ボタン" width="12" class="inline-icon">をタップし、<br>「ブックマークを追加」で保存します。</p>
+							<figure class="shot"><img src="images/ios-1.webp" alt="共有シートの「ブックマークを追加」"><span class="shot-ph">共有シートの<br>「ブックマークを追加」</span></figure>
+						</div>
+					</li>
+					<li class="howto-item">
+						<div class="howto-rail">
+							<span class="howto-num">2</span>
+							<span class="howto-line"></span>
+						</div>
+						<div class="howto-body">
+							<p><img src="images/ios-read.svg" alt="本アイコン" width="16" class="inline-icon">アイコンでブックマーク一覧を開き、<br>「編集」から追加したブックマークを選びます。</p>
+							<figure class="shot"><img src="images/ios-2.webp" alt="ブックマーク一覧の「編集」"><span class="shot-ph">ブックマーク一覧の<br>「編集」</span></figure>
+						</div>
+					</li>
+					<li class="howto-item">
+						<div class="howto-rail">
+							<span class="howto-num">3</span>
+						</div>
+						<div class="howto-body">
+							<p><strong>名前</strong>を「ぴあ一括入力」に変更し、<br><strong>URL</strong> を消してコードを貼り付けます。</p>
+							<figure class="shot"><img src="images/ios-3.webp" alt="ブックマークの名前とURLの編集画面"><span class="shot-ph">名前とURLの<br>編集画面</span></figure>
+						</div>
+					</li>
+				</ol>
+			</div>
+
+			<div class="tab-panel" data-panel="and">
+				<ol class="howto">
+					<li class="howto-item">
+						<div class="howto-rail">
+							<span class="howto-num">1</span>
+							<span class="howto-line"></span>
+						</div>
+						<div class="howto-body">
+							<p>右上の「⋮」をタップし、<br>☆ アイコンで追加します。</p>
+							<!-- <figure class="shot"><img src="images/and-1.png" alt="Chrome のメニューの☆アイコン"><span class="shot-ph">⋮メニューの<br>☆アイコン</span></figure> -->
+						</div>
+					</li>
+					<li class="howto-item">
+						<div class="howto-rail">
+							<span class="howto-num">2</span>
+							<span class="howto-line"></span>
+						</div>
+						<div class="howto-body">
+							<p>もう一度「⋮」からブックマーク一覧を開き、<br>該当項目の「⋮」で「編集」を選びます。</p>
+						</div>
+					</li>
+					<li class="howto-item">
+						<div class="howto-rail">
+							<span class="howto-num">3</span>
+						</div>
+						<div class="howto-body">
+							<p><strong>名前</strong>を「ぴあ一括入力」に変更し、<br><strong>URL</strong> を消してコードを貼り付けます。</p>
+							<!-- <figure class="shot"><img src="images/and-2.png" alt="ブックマークの名前とURLの編集画面"><span class="shot-ph">名前とURLの<br>編集画面</span></figure> -->
+						</div>
+					</li>
+				</ol>
+			</div>
+
+			<div class="tab-panel" data-panel="pc">
+				<ol class="howto">
+					<li class="howto-item">
+						<div class="howto-rail">
+							<span class="howto-num">1</span>
+							<span class="howto-line"></span>
+						</div>
+						<div class="howto-body">
+							<p>ブックマークバーの空白を右クリックし、<br>「ページを追加」を選びます。</p>
+						</div>
+					</li>
+					<li class="howto-item">
+						<div class="howto-rail">
+							<span class="howto-num">2</span>
+						</div>
+						<div class="howto-body">
+							<p><strong>名前</strong>を「ぴあ一括入力」、<br><strong>URL</strong> にコードを貼り付けて保存します。</p>
+							<figure class="shot"><img src="images/pc-1.webp" alt="「ページを追加」ダイアログ"><span class="shot-ph">「ページを追加」<br>ダイアログ</span></figure>
+						</div>
+					</li>
+				</ol>
+				<p class="hint">Safari・Firefox なども同じ手順です。</p>
+			</div>
+		</div>
+
+		<div class="card">
+			<div class="step-head"><span class="step-num">4</span><h2>申込フォームで使う</h2></div>
+			<p>申込入力ページを開いている時に、ブックマークから「ぴあ一括入力」を選びます。</p>
+			<p class="step-lead" style="margin-bottom:0;">入力欄がまとめて埋まります。</p>
+		</div>
+
+		<details class="guide" id="guideTrouble">
+			<summary>動かないときは</summary>
+			<div class="guide-body">
+				<div class="qa">
+					<p class="qa-q">押しても何も起きない</p>
+					<p class="qa-a">申込入力ページ以外で押していませんか？ぴあの申込入力ページを開いた状態で使ってください。</p>
+				</div>
+				<div class="qa">
+					<p class="qa-q">検索結果が出る／別のページに移動してしまう</p>
+					<p class="qa-a">コードの先頭にある <code>javascript:</code> が欠けています。ブックマークのURLを、コードの先頭から貼り直してください。</p>
+				</div>
+				<div class="qa">
+					<p class="qa-q">一部の欄だけ埋まらない</p>
+					<p class="qa-a">その欄は手入力してください。</p>
+				</div>
+				<div class="qa">
+					<p class="qa-q">その他動作しないとき</p>
+					<p class="qa-a">ツールの利用は諦め、手入力してください。</p>
+				</div>
+			</div>
+		</details>
+
+		<div class="card">
+			<h2>注意事項</h2>
+			<ul class="notes">
+				<li>入力した内容は、生成されるコードの中にそのまま保持されます。外部に送信されることはありませんが、共有パソコンでの保存や、コードを他人に渡すことは避けてください。</li>
+				<li>使わなくなったブックマークは削除してください。次の受付で使う場合は、その都度作り直せます。</li>
+				<li>チケットサイト側の仕様変更により、本ツールが使えなくなる場合があります。</li>
+			</ul>
+		</div>
+
+		<footer class="footer">
+			<ul>
+				<li>本ツールは毎公演の入力の手間に耐えかねて作成した非公式ツールです。チケットサイト、主催者とは一切関係ありません。</li>
+				<li>入力の補助のみを目的としたツールで、bot ではありません。入力欄を埋めるだけで、複数公演への自動申込や申込の送信は行いません。</li>
+				<li>利用は自己責任とします。利用によって生じたいかなる結果についても、作成者は責任を負いません。</li>
+				<li>本ツールに関する質問・個別サポートには一切対応しません。</li>
+			</ul>
+		</footer>
+	</div>
 	<script>
 		function pad2(n) { var s = String(n || '').replace(/\D/g, ''); if (!s) return ''; return s.length === 1 ? '0' + s : s; }
 
@@ -501,7 +989,9 @@
 			].join('');
 
 			document.getElementById('bookmarkletCode').value = script;
-			document.getElementById('output').style.display = 'block';
+			var out = document.getElementById('output');
+			out.classList.remove('is-empty');
+			out.scrollIntoView({ behavior: 'smooth', block: 'start' });
 		};
 
 		document.getElementById('btnCopy').onclick = function() {
@@ -516,6 +1006,43 @@
 				document.getElementById('copyResult').textContent = 'コピーに失敗しました';
 			}
 		};
+	
+		// 端末別タブ
+		(function() {
+			var btns = document.querySelectorAll('.tab-btn');
+			for (var i = 0; i < btns.length; i++) {
+				btns[i].addEventListener('click', function() {
+					var key = this.getAttribute('data-tab');
+					var all = document.querySelectorAll('.tab-btn');
+					for (var j = 0; j < all.length; j++) {
+						all[j].setAttribute('aria-selected', all[j] === this ? 'true' : 'false');
+					}
+					var panels = document.querySelectorAll('.tab-panel');
+					for (var k = 0; k < panels.length; k++) {
+						panels[k].classList.toggle('active', panels[k].getAttribute('data-panel') === key);
+					}
+				});
+			}
+			// 利用端末を推定して初期タブを選択
+			var ua = navigator.userAgent;
+			var initial = 'pc';
+			if (/iPhone|iPad|iPod/.test(ua)) initial = 'ios';
+			else if (/Android/.test(ua)) initial = 'and';
+			var target = document.querySelector('.tab-btn[data-tab="' + initial + '"]');
+			if (target) target.click();
+		})();
+
+		// キャプチャ画像が未配置の場合はプレースホルダを表示
+		(function() {
+			var imgs = document.querySelectorAll('.shot img');
+			for (var i = 0; i < imgs.length; i++) {
+				(function(img) {
+					var fail = function() { img.parentNode.classList.add('is-missing'); };
+					img.addEventListener('error', fail);
+					if (img.complete && img.naturalWidth === 0) fail();
+				})(imgs[i]);
+			}
+		})();
 	</script>
 </body>
 </html>
