@@ -1,0 +1,6 @@
+wrangler.jsonc
+.assetsignore
+_config.yml
+CLAUDE.md
+README.md
+docs/
